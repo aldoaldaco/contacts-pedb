@@ -1,0 +1,51 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<dom-module id="my-profile">
+  <template>
+    <style>
+      .title{
+        width: 100%;
+        height: 6%;
+        margin: 0px;
+      }
+      .container{
+        width: 100%;
+        height: 94%;
+        background-color: #CCCCCC;
+        margin: 0px;
+        padding: 0px;
+      }
+    </style>
+    <h2 class="title">[[title]]</h2>
+    <div class="container">
+      <img src="" alt="">
+      <p>[[mail.name]]</p>
+      <p>[[mail.email]]</p>
+      <p>[[mail.info]]</p>
+    </div>
+  </template>
+  <script>
+    Polymer({
+      is: 'my-profile',
+      properties: {
+        title: {
+          type: String,
+          value: 'PROFILE'
+        },
+        mail: {
+          type: Object,
+          value: {
+            name: '',
+            email: '',
+            info: ''
+          },
+          notify: true
+        },
+        info: {
+          type: String,
+            value: '',
+          notify: true
+        }
+      }
+    });
+  </script>
+</dom-module>

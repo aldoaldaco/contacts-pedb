@@ -1,0 +1,58 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../list/my-list.html">
+<link rel="import" href="../form/my-form.html">
+<link rel="import" href="../profile/my-profile.html">
+<dom-module id="my-app">
+  <template>
+    <style>
+    :host{
+      width: 100%;
+      height: 100%;
+    }
+    .title{
+      margin: 0px;
+      color: #4165ad;
+    }
+    .container{
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      display: flex;
+      flex-direction: row;
+    }
+    .list{
+      width: calc(30% - 3px);
+      height: 100%;
+    }
+    .profile{
+      width: 70%;
+      height: 100%;
+    }
+    </style>
+    <!--<h2 class="title">[[title]]</h2>-->
+    <div class="container">
+      <my-list class="list"></my-list>
+      <my-profile mail="[[mail]]" class="profile"></my-profile>
+      <!--<my-form on-new-mail='handleNewMail' class="form"></my-form>-->
+    </div>
+  </template>
+  <script>
+    Polymer({
+      is: 'my-app',
+      properties:{
+        title: {
+          type: String,
+          value: 'CONTACTS'
+        },
+        mail: {
+          type: Object,
+          notify: true,
+          reflectToAttribute: true
+        }
+      },
+      handleNewMail: function(event){
+        this.mail = event.detail;
+      }
+    });
+  </script>
+</dom-module>

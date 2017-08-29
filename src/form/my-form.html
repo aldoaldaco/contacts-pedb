@@ -1,0 +1,117 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html" />
+<link rel="import" href="../../bower_components/paper-input/paper-input.html" />
+<link rel="import" href="../../bower_components/paper-button/paper-button.html" />
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html" />
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html" />
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html" />
+<link rel="import" href="../../bower_components/iron-icons/social-icons.html" />
+<dom-module id="my-form">
+  <template>
+    <template is="dom-if" if="{{flag}}">
+      <style>
+      :host{
+        width: 100%;
+      }
+      .title{
+        margin: 0px;
+        position: fixed;
+      }
+      .container{
+        width: 100%;
+        height: 100%;
+      }
+      .form{
+        width: 80%;
+        text-align: center;
+        margin: 0 auto;
+      }
+      paper-button{
+        width: 80%;
+      }
+      </style>
+      <h2 class="title">[[title]]</h2>
+      <div class="container">
+        <form class="form">
+          <paper-input label="name" id="name" value="{{name}}">
+            <iron-icon icon="social:person" slot="prefix"></iron-icon>
+            <paper-icon-button slot="suffix" on-click="clearInput" icon="clear" alt="clear" title="clear"></paper-icon-button>
+          </paper-input>
+          <paper-input label="email" id="email" value="{{email}}">
+            <iron-icon icon="mail" slot="prefix"></iron-icon>
+            <paper-icon-button slot="suffix" on-click="clearInput" icon="clear" alt="clear" title="clear"></paper-icon-button>
+          </paper-input>
+          <paper-button id="submit">Send</paper-button>
+        </form>
+      </div>
+    </template>
+  </template>
+  <script>
+    Polymer({
+      is: 'my-form',
+      properties: {
+        title: {
+          type: String,
+          value: 'NEW USER'
+        },
+        flag: {
+          type: Boolean,
+          value: true,
+          notify: true
+        },
+        name: {
+          type: String,
+        },
+        email: {
+          type: String,
+        },
+        info: {
+          type: String,
+          value: 'Lorem ipsum dolor sit consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+          notify: true
+        },
+        mail: {
+          type: Object,
+          value: {
+            name: '',
+            email: ''
+          },
+          notify: true
+        }
+      },
+      /*
+        Add listener to hear click on submit button
+      */
+      attached: function(){
+          this.listen(this.$.submit, 'tap', 'newMail');
+      },
+      /*
+        Get the id of clicked element
+      */
+      clearInput: function(event){
+        let id = event.target.parentElement.parentElement.parentElement.parentElement.parentElement.id;
+        this.$.id.value = null; //dont working
+      },
+      /*
+        Dispatch event to say about the new mail
+      */
+      newMail: function(){
+        if(this.name == undefined || this.email == undefined){
+          alert("Error en el formulario llene los datos correctamente");
+        } else{
+          this.mail = {
+            name:  this.name,
+            email: this.email,
+            info: this.info
+          };
+          this.fire('new-mail',this.mail);
+        }
+      },
+      /*
+        Turn off the listener of click event
+      */
+      detached: function(){
+          this.unlisten(this.$.submit, 'tap', 'newMail');
+      },
+    });
+  </script>
+</dom-module>

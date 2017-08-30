@@ -21,7 +21,7 @@
       flex-direction: row;
     }
     .list{
-      width: calc(30% - 3px);
+      width: calc(30% - 2px);
       height: 100%;
     }
     .profile{
@@ -31,9 +31,10 @@
     </style>
     <!--<h2 class="title">[[title]]</h2>-->
     <div class="container">
-      <my-list class="list"></my-list>
-      <my-profile mail="[[mail]]" class="profile"></my-profile>
-      <!--<my-form on-new-mail='handleNewMail' class="form"></my-form>-->
+      <my-list on-view-contact="handleViewContact" class="list"></my-list>
+      <my-profile contact="[[contact]]" class="profile"></my-profile>
+      <!--<my-form on-add-contact='handleAddContact' on-edit-contact='handleEditContact' class="form"></my-form>-->
+      <!--<my-image class="form"></my-image>-->
     </div>
   </template>
   <script>
@@ -44,14 +45,15 @@
           type: String,
           value: 'CONTACTS'
         },
-        mail: {
+        contact: {
           type: Object,
           notify: true,
           reflectToAttribute: true
         }
       },
-      handleNewMail: function(event){
-        this.mail = event.detail;
+      handleViewContact: function(event){
+        console.log(this.contact);
+        this.contact = event.detail;
       }
     });
   </script>

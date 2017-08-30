@@ -7,7 +7,6 @@
 <link rel="import" href="../../bower_components/iron-icons/social-icons.html" />
 <dom-module id="my-form">
   <template>
-    <template is="dom-if" if="{{flag}}">
       <style>
       :host{
         width: 100%;
@@ -29,21 +28,35 @@
         width: 80%;
       }
       </style>
-      <h2 class="title">[[title]]</h2>
-      <div class="container">
-        <form class="form">
-          <paper-input label="name" id="name" value="{{name}}">
-            <iron-icon icon="social:person" slot="prefix"></iron-icon>
-            <paper-icon-button slot="suffix" on-click="clearInput" icon="clear" alt="clear" title="clear"></paper-icon-button>
-          </paper-input>
-          <paper-input label="email" id="email" value="{{email}}">
-            <iron-icon icon="mail" slot="prefix"></iron-icon>
-            <paper-icon-button slot="suffix" on-click="clearInput" icon="clear" alt="clear" title="clear"></paper-icon-button>
-          </paper-input>
-          <paper-button id="submit">Send</paper-button>
-        </form>
-      </div>
-    </template>
+      <!--<template is="dom-if" if="[[flag]]">-->
+        <h2 class="title">[[title]]</h2>
+        <div class="container">
+          <form class="form">
+            <paper-input label-always-float label="first" id="first" value="{{contact.name.first}}">
+              <iron-icon icon="social:person" slot="prefix"></iron-icon>
+              <paper-icon-button slot="suffix" on-tap="clearInput" icon="clear" alt="clear" title="clear"></paper-icon-button>
+            </paper-input>
+            <paper-input label-always-float label="last" id="last" value="{{contact.name.last}}">
+              <iron-icon icon="social:person" slot="prefix"></iron-icon>
+              <paper-icon-button slot="suffix" on-tap="clearInput" icon="clear" alt="clear" title="clear"></paper-icon-button>
+            </paper-input>
+            <paper-input label-always-float label="email" id="email" value="{{contact.email}}">
+              <iron-icon icon="mail" slot="prefix"></iron-icon>
+              <paper-icon-button slot="suffix" on-tap="clearInput" icon="clear" alt="clear" title="clear"></paper-icon-button>
+            </paper-input>
+            <paper-input label-always-float label="cell" id="cell" value="{{contact.cell}}">
+              <iron-icon icon="communication:phone" slot="prefix"></iron-icon>
+              <paper-icon-button slot="suffix" on-tap="clearInput" icon="clear" alt="clear" title="clear"></paper-icon-button>
+            </paper-input>
+            <paper-input label-always-float label="username" id="username" value="{{contact.login.username}}">
+              <iron-icon icon="social:person" slot="prefix"></iron-icon>
+              <paper-icon-button slot="suffix" on-tap="clearInput" icon="clear" alt="clear" title="clear"></paper-icon-button>
+            </paper-input>
+            <paper-button id="save">Save</paper-button>
+            <paper-button id="update">Update</paper-button>
+          </form>
+        </div>
+      <!--</template>-->
   </template>
   <script>
     Polymer({
@@ -58,7 +71,16 @@
           value: true,
           notify: true
         },
-        name: {
+        action: {
+          type: String,
+          value: '',
+          notify: true,
+          oberver: 'onAction()'
+        },
+        first: {
+          type: String,
+        },
+        last: {
           type: String,
         },
         email: {
@@ -76,41 +98,50 @@
             email: ''
           },
           notify: true
+        },
+        contact: {
+          type: Object,
+          notify: true,
+          reflectToAttribute: true
         }
       },
       /*
         Add listener to hear click on submit button
       */
       attached: function(){
-          this.listen(this.$.submit, 'tap', 'newMail');
+          this.listen(this.$.save, 'tap', 'saveContact');
+          this.listen(this.$.update, 'tap', 'updateContact');
       },
       /*
         Get the id of clicked element
       */
       clearInput: function(event){
         let id = event.target.parentElement.parentElement.parentElement.parentElement.parentElement.id;
-        this.$.id.value = null; //dont working
+        for (let x in this.$) {
+          if(id == x){
+            //console.log(this.$$(`#${x}`).value);
+          }
+        }
+         //dont working
+      },
+      saveContact: function(){
+        console.log("on case to save");
+      },
+      updateContact: function(){
+        console.log("on case to update");
       },
       /*
-        Dispatch event to say about the new mail
+        Dispatch event depend of the action type
       */
-      newMail: function(){
-        if(this.name == undefined || this.email == undefined){
-          alert("Error en el formulario llene los datos correctamente");
-        } else{
-          this.mail = {
-            name:  this.name,
-            email: this.email,
-            info: this.info
-          };
-          this.fire('new-mail',this.mail);
-        }
+      onAction: function(){
+        console.log(this.action);
       },
       /*
         Turn off the listener of click event
       */
       detached: function(){
-          this.unlisten(this.$.submit, 'tap', 'newMail');
+        this.unlisten(this.$.save, 'tap', 'saveContact');
+        this.unlisten(this.$.update, 'tap', 'updateContact');
       },
     });
   </script>

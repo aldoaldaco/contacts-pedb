@@ -73,7 +73,6 @@
                 font-size: 1.4rem;
             }
         </style>
-
         <app-drawer-layout responsive-width="1280px">
             <app-drawer swipe-open slot="drawer">
                 <div class="avatar-container">
@@ -104,11 +103,11 @@
                         <div main-title spacer>Mis contactos</div>
                     </app-toolbar>
                 </app-header>
-                <my-list on-view-contact="handleViewContact" class="list"></my-list>
+                <my-list on-view-contact="handleViewContact" on-edit-contact="handleEditContact" class="list"></my-list>
+                <my-profile contact="[[contact]]" class="profile"></my-profile>
+                <my-form contact-edit="[[contact]]" action="[[action]]" class="form"></my-form>
             </app-header-layout>
         </app-drawer-layout>
-
-
     </template>
     <script>
         Polymer({
@@ -122,11 +121,19 @@
                     type: Object,
                     notify: true,
                     reflectToAttribute: true
-                }
+                },
             },
             handleViewContact: function (event) {
-                console.log(this.contact);
                 this.contact = event.detail;
+                console.log(this.contact);
+            },
+            handleEditContact: function (event) {
+                this.contact = event.detail;
+                console.log(this.contact);
+            },
+            handleDeleteContact: function (event) {
+                this.contact = event.detail;
+                console.log(this.contact);
             }
         });
     </script>

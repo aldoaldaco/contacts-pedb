@@ -2,6 +2,7 @@
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html" />
 <link rel="import" href="../../bower_components/iron-icons/editor-icons.html" />
 <link rel="import" href="../../bower_components/iron-icons/image-icons.html" />
+<link rel="import" href="../../bower_components/iron-icons/communication-icons.html" />
 <dom-module id="my-item">
   <template>
     <style>
@@ -28,25 +29,47 @@
       }
       .settings{
         width: 100%;
+        position: relative;
         background-color: #F4F4F4;
       }
       .info{
+        position: relative;
         color: #1C3A94;
       }
       .edit{
+        position: relative;
         color: #77d800;
       }
       .delete{
+        position: relative;
         color: #ff0000;
       }
       .more{
+        position: relative;
         color: #000000;
       }
-
+      .popup{
+        margin: 0px;
+        background-color: #CCCCCC;
+        position: absolute;
+        left: 73%;
+        display: inline-flex;
+      }
+      .popup::after {
+        content: "";
+        position: absolute;
+        top: calc(50% - 5px);
+        left: -10px;
+        margin-left: 0px;
+        margin-right: 0px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: transparent #CCCCCC transparent transparent;
+      }
     </style>
     <div class="container">
-      <img src="[[contact.picture.large]]" alt="[[contact.login.username]]" class="picture">
       <div class="information">
+        <img src="[[contact.picture.large]]" alt="[[contact.login.username]]" class="picture">
         <p class="name">[[contact.name.first]]</p>
         <p class="name">[[contact.name.last]]</p>
       </div>
@@ -55,13 +78,14 @@
         <paper-icon-button icon="editor:mode-edit" id="edit" class="edit"></paper-icon-button>
         <paper-icon-button icon="delete" id="delete" class="delete"></paper-icon-button>
         <paper-icon-button icon="more-vert" id="more" class="more"></paper-icon-button>
+        <template is="dom-if" if="[[flag]]">
+          <div class="popup">
+            <paper-icon-button icon="image:crop-original" id="iconPicture"></paper-icon-button>
+            <paper-icon-button icon="communication:call" id="iconCall"></paper-icon-button>
+          </div>
+        </template>
       </div>
-      <template is="dom-if" if="[[flag]]">
-        <div class="popup">
-          <paper-icon-button icon="image:crop-original" id="picture"></paper-icon-button>
-          <paper-icon-button icon="image:crop-original" id="picture"></paper-icon-button>
-        </div>
-      </template
+
     </div>
   </template>
   <script>
@@ -105,7 +129,13 @@
       */
       deleteContact: function(){
         console.log(this.contact);
-        this.fire('delete-contact',this.contact);
+        if(confirm("You want delete the contact")){
+          console.log("Contact was deleted");
+          this.fire('delete-contact',this.contact);
+        } else {
+          console.log("Contact still alive");
+        }
+
       },
       /*
         Dispatch event to say about the view more actions

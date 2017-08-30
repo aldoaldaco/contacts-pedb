@@ -1,6 +1,10 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/app-layout/app-layout.html">
 <link rel="import" href="../../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
+<link rel="import" href="../../bower_components/app-route/app-route.html">
+<link rel="import" href="../../bower_components/app-route/app-location.html">
+<link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
 
 <link rel="import" href="../list/my-list.html">
 <link rel="import" href="../form/my-form.html">
@@ -11,6 +15,10 @@
             :host {
                 width: 100%;
                 height: 100%;
+            }
+
+            a {
+                text-decoration: none;
             }
 
             .list {
@@ -73,6 +81,13 @@
                 font-size: 1.4rem;
             }
         </style>
+        <app-location route="{{route}}"></app-location>
+        <app-route
+                route="{{route}}"
+                pattern="/:page"
+                data="{{data}}"
+                tail="{{tail}}">
+        </app-route>
         <app-drawer-layout responsive-width="1280px">
             <app-drawer swipe-open slot="drawer">
                 <div class="avatar-container">
@@ -83,7 +98,10 @@
                     <div class="email">heyfromjonathan@gmail.com</div>
                 </div>
                 <app-toolbar>
-                    <a href="#">Mis contactos</a>
+                    <paper-listbox>
+                        <paper-item><a href="/contacts-list">Mis contactos</a></paper-item>
+                        <paper-item><a href="/add-contact">Crear contacto</a></paper-item>
+                    </paper-listbox>
                 </app-toolbar>
             </app-drawer>
             <app-header-layout>
@@ -103,9 +121,19 @@
                         <div main-title spacer>Mis contactos</div>
                     </app-toolbar>
                 </app-header>
-                <my-list on-view-contact="handleViewContact" on-edit-contact="handleEditContact" class="list"></my-list>
-                <my-profile contact="[[contact]]" class="profile"></my-profile>
-                <my-form contact-edit="[[contact]]" action="[[action]]" class="form"></my-form>
+                <iron-pages selected="{{data.page}}" attr-for-selected="page-name" fallback-selection="contacts-list">
+                    <div page-name="contacts-list">
+                        <my-list page-name="contacts-list" on-view-contact="handleViewContact"
+                                 on-edit-contact="handleEditContact"
+                                 class="list"></my-list>
+                    </div>
+                    <div page-name="profile">
+                        <my-profile contact="[[contact]]" class="profile"></my-profile>
+                    </div>
+                    <div page-name="add-contact">
+                        <my-form contact-edit="[[contact]]" action="[[action]]" class="form"></my-form>
+                    </div>
+                </iron-pages>
             </app-header-layout>
         </app-drawer-layout>
     </template>
@@ -113,10 +141,6 @@
         Polymer({
             is: 'my-app',
             properties: {
-                title: {
-                    type: String,
-                    value: 'CONTACTS'
-                },
                 contact: {
                     type: Object,
                     notify: true,
@@ -125,15 +149,14 @@
             },
             handleViewContact: function (event) {
                 this.contact = event.detail;
-                console.log(this.contact);
+                this.set('data.page', 'profile');
             },
             handleEditContact: function (event) {
                 this.contact = event.detail;
-                console.log(this.contact);
+                this.set('data.page', 'add-contact');
             },
             handleDeleteContact: function (event) {
                 this.contact = event.detail;
-                console.log(this.contact);
             }
         });
     </script>

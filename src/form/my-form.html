@@ -1,151 +1,146 @@
-<link rel="import" href="../../bower_components/polymer/polymer.html" />
-<link rel="import" href="../../bower_components/paper-input/paper-input.html" />
-<link rel="import" href="../../bower_components/paper-button/paper-button.html" />
-<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html" />
-<link rel="import" href="../../bower_components/iron-icon/iron-icon.html" />
-<link rel="import" href="../../bower_components/iron-icons/iron-icons.html" />
-<link rel="import" href="../../bower_components/iron-icons/social-icons.html" />
+<link rel="import" href="../../bower_components/polymer/polymer.html"/>
+<link rel="import" href="../../bower_components/paper-input/paper-input.html"/>
+<link rel="import" href="../../bower_components/paper-button/paper-button.html"/>
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html"/>
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html"/>
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html"/>
+<link rel="import" href="../../bower_components/iron-icons/social-icons.html"/>
 <dom-module id="my-form">
-  <template>
-      <style>
-      :host{
-        width: 100%;
-      }
-      .title{
-        margin: 0px;
-        position: fixed;
-      }
-      .container{
-        width: 100%;
-        height: 100%;
-      }
-      .form{
-        width: 80%;
-        text-align: center;
-        margin: 0 auto;
-      }
-      paper-button{
-        width: 80%;
-      }
-      </style>
+    <template>
+        <style>
+            :host {
+                width: 100%;
+            }
+
+            .title {
+                margin: 0px;
+                position: fixed;
+            }
+
+            .container {
+                width: 100%;
+                height: 100%;
+            }
+
+            .form {
+                width: 80%;
+                text-align: center;
+                margin: 0 auto;
+            }
+
+            paper-button {
+                width: 80%;
+            }
+        </style>
 
         <h2 class="title">[[title]]</h2>
         <div class="container">
-          <form class="form">
-            <paper-input label-always-float label="first" id="first" value="{{contactEdit.name.first}}">
-              <iron-icon icon="social:person" slot="prefix"></iron-icon>
-              <paper-icon-button slot="suffix" on-tap="clearInput" icon="clear" alt="clear" title="clear"></paper-icon-button>
-            </paper-input>
-            <paper-input label-always-float label="last" id="last" value="{{contactEdit.name.last}}">
-              <iron-icon icon="social:person" slot="prefix"></iron-icon>
-              <paper-icon-button slot="suffix" on-tap="clearInput" icon="clear" alt="clear" title="clear"></paper-icon-button>
-            </paper-input>
-            <paper-input label-always-float label="email" id="email" value="{{contactEdit.email}}">
-              <iron-icon icon="mail" slot="prefix"></iron-icon>
-              <paper-icon-button slot="suffix" on-tap="clearInput" icon="clear" alt="clear" title="clear"></paper-icon-button>
-            </paper-input>
-            <paper-input label-always-float label="cell" id="cell" value="{{contactEdit.cell}}">
-              <iron-icon icon="communication:phone" slot="prefix"></iron-icon>
-              <paper-icon-button slot="suffix" on-tap="clearInput" icon="clear" alt="clear" title="clear"></paper-icon-button>
-            </paper-input>
-            <paper-input label-always-float label="username" id="username" value="{{contactEdit.login.username}}">
-              <iron-icon icon="social:person" slot="prefix"></iron-icon>
-              <paper-icon-button slot="suffix" on-tap="clearInput" icon="clear" alt="clear" title="clear"></paper-icon-button>
-            </paper-input>
-            <!--<template is="dom-if" if="{{flag}}">-->
-              <paper-button id="update">Update</paper-button>
-            <!--</template>-->
-            <!--<template is="dom-if" if="{{!flag}}">-->
-              <paper-button id="save">Save</paper-button>
-            <!--</template>-->
-          </form>
+            <form class="form">
+                <paper-input label-always-float label="first" id="first" value="{{contactEdit.name.first}}">
+                    <iron-icon icon="social:person" slot="prefix"></iron-icon>
+                    <paper-icon-button slot="suffix" on-tap="clearInput" icon="clear" alt="clear"
+                                       title="clear"></paper-icon-button>
+                </paper-input>
+                <paper-input label-always-float label="last" id="last" value="{{contactEdit.name.last}}">
+                    <iron-icon icon="social:person" slot="prefix"></iron-icon>
+                    <paper-icon-button slot="suffix" on-tap="clearInput" icon="clear" alt="clear"
+                                       title="clear"></paper-icon-button>
+                </paper-input>
+                <paper-input label-always-float label="email" id="email" value="{{contactEdit.email}}">
+                    <iron-icon icon="mail" slot="prefix"></iron-icon>
+                    <paper-icon-button slot="suffix" on-tap="clearInput" icon="clear" alt="clear"
+                                       title="clear"></paper-icon-button>
+                </paper-input>
+                <paper-input label-always-float label="cell" id="cell" value="{{contactEdit.cell}}">
+                    <iron-icon icon="communication:phone" slot="prefix"></iron-icon>
+                    <paper-icon-button slot="suffix" on-tap="clearInput" icon="clear" alt="clear"
+                                       title="clear"></paper-icon-button>
+                </paper-input>
+                <paper-input label-always-float label="username" id="username" value="{{contactEdit.login.username}}">
+                    <iron-icon icon="social:person" slot="prefix"></iron-icon>
+                    <paper-icon-button slot="suffix" on-tap="clearInput" icon="clear" alt="clear"
+                                       title="clear"></paper-icon-button>
+                </paper-input>
+                <template is="dom-if" if="{{flag}}">
+                    <paper-button id="update" on-tap="updateContact">Update</paper-button>
+                </template>
+                <template is="dom-if" if="{{!flag}}">
+                    <paper-button id="save" on-tap="saveContact">Save</paper-button>
+                </template>
+            </form>
         </div>
 
-  </template>
-  <script>
-    Polymer({
-      is: 'my-form',
-      properties: {
-        title: {
-          type: String,
-          value: 'NEW USER'
-        },
-        flag: {
-          type: Boolean,
-          value: true,
-          notify: true
-        },
-        action: {
-          type: String,
-          value: '',
-          notify: true
-        },
-        first: {
-          type: String,
-        },
-        last: {
-          type: String,
-        },
-        email: {
-          type: String,
-        },
-        info: {
-          type: String,
-          value: 'Lorem ipsum dolor sit consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-          notify: true
-        },
-        mail: {
-          type: Object,
-          value: {
-            name: '',
-            email: ''
-          },
-          notify: true
-        },
-        contactEdit: {
-          type: Object,
-          notify: true,
-          reflectToAttribute: true
-        }
-      },
-      /*
-        Add listener to hear click on submit button
-      */
-      attached: function(){
-          this.listen(this.$.save, 'tap', 'saveContact');
-          this.listen(this.$.update, 'tap', 'updateContact');
-      },
-      /*
-        Get the id of clicked element
-      */
-      clearInput: function(event){
-        let id = event.target.parentElement.parentElement.parentElement.parentElement.parentElement.id;
-        for (let x in this.$) {
-          if(id == x){
-            //console.log(this.$$(`#${x}`).value);
-          }
-        }
-         //dont working
-      },
-      saveContact: function(){
-        console.log("on case to save");
-      },
-      updateContact: function(){
-        console.log("on case to update");
-      },
-      /*
-        Dispatch event depend of the action type
-      */
-      onAction: function(){
-        console.log(this.action);
-      },
-      /*
-        Turn off the listener of click event
-      */
-      detached: function(){
-        this.unlisten(this.$.save, 'tap', 'saveContact');
-        this.unlisten(this.$.update, 'tap', 'updateContact');
-      },
-    });
-  </script>
+    </template>
+    <script>
+        Polymer({
+            is: 'my-form',
+            properties: {
+                title: {
+                    type: String,
+                    value: 'NEW USER'
+                },
+                flag: {
+                    type: Boolean,
+                    value: false,
+                    notify: true
+                },
+                action: {
+                    type: String,
+                    value: '',
+                    notify: true
+                },
+                first: {
+                    type: String,
+                },
+                last: {
+                    type: String,
+                },
+                email: {
+                    type: String,
+                },
+                info: {
+                    type: String,
+                    value: 'Lorem ipsum dolor sit consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+                    notify: true
+                },
+                mail: {
+                    type: Object,
+                    value: {
+                        name: '',
+                        email: ''
+                    },
+                    notify: true
+                },
+                contactEdit: {
+                    type: Object,
+                    notify: true,
+                    reflectToAttribute: true
+                }
+            },
+            /*
+              Get the id of clicked element
+            */
+            clearInput: function (event) {
+                let id = event.target.parentElement.parentElement.parentElement.parentElement.parentElement.id;
+                for (let x in this.$) {
+                    if (id == x) {
+                        //console.log(this.$$(`#${x}`).value);
+                    }
+                }
+                //dont working
+            },
+            saveContact: function () {
+                console.log("on case to save");
+            },
+            updateContact: function () {
+                console.log("on case to update");
+            },
+            /*
+              Dispatch event depend of the action type
+            */
+            onAction: function () {
+                console.log(this.action);
+            },
+        });
+    </script>
 </dom-module>

@@ -114,23 +114,21 @@
         Dispatch event to say about the view contact
       */
       viewContact: function(event){
-        console.log(this.contact);
         this.fire('view-contact',this.contact);
       },
       /*
         Dispatch event to say about the edit contact
       */
       editContact: function(){
-        console.log(this.contact);
         this.fire('edit-contact',this.contact);
       },
       /*
         Dispatch event to say about the delete contact
       */
       deleteContact: function(){
-        console.log(this.contact);
+        //console.log(this.contact);
         if(confirm("You want delete the contact")){
-          console.log("Contact was deleted");
+          //console.log("Contact was deleted");
           this.fire('delete-contact',this.contact);
         } else {
           console.log("Contact still alive");
@@ -138,7 +136,7 @@
 
       },
       /*
-        Dispatch event to say about the view more actions
+        Dispatch event to say about the more actions
       */
       moreActions: function(){
         this.flag = !this.flag;

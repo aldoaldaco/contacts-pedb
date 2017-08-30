@@ -1,68 +1,140 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/app-layout/app-layout.html">
+<link rel="import" href="../../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
+
 <link rel="import" href="../list/my-list.html">
 <link rel="import" href="../form/my-form.html">
 <link rel="import" href="../profile/my-profile.html">
 <dom-module id="my-app">
-  <template>
-    <style>
-    :host{
-      width: 100%;
-      height: 100%;
-    }
-    .title{
-      margin: 0px;
-      color: #4165ad;
-    }
-    .container{
-      width: 100%;
-      height: 100%;
-      text-align: center;
-      display: flex;
-      flex-direction: row;
-    }
-    .list{
-      width: calc(30% - 2px);
-      height: 100%;
-    }
-    .profile{
-      width: 70%;
-      height: 100%;
-    }
-    </style>
-    <!--<h2 class="title">[[title]]</h2>-->
-    <div class="container">
-      <my-list on-view-contact="handleViewContact" on-edit-contact="handleEditContact" class="list"></my-list>
-      <my-profile contact="[[contact]]" class="profile"></my-profile>
-      <my-form contact-edit="[[contact]]" action="[[action]]" class="form"></my-form>
-      <!--<my-image class="form"></my-image>-->
-    </div>
-  </template>
-  <script>
-    Polymer({
-      is: 'my-app',
-      properties:{
-        title: {
-          type: String,
-          value: 'CONTACTS'
-        },
-        contact: {
-          type: Object,
-          notify: true,
-          reflectToAttribute: true
-        },
-      },
-      handleViewContact: function(event){
-        this.contact = event.detail;
-        console.log(this.contact);
-      },
-      handleEditContact: function(event){
-        this.contact = event.detail;
-        console.log(this.contact);
-      },
-      handleDeleteContact: function(event){
-        this.contact = event.detail;
-        console.log(this.contact);
-      }
-    });
-  </script>
+    <template>
+        <style>
+            :host {
+                width: 100%;
+                height: 100%;
+            }
+
+            .list {
+                width: calc(30% - 2px);
+                height: 100%;
+            }
+
+            app-drawer-layout:not([narrow]) [drawer-toggle] {
+                display: none;
+            }
+
+            app-header {
+                color: #fff;
+                background-color: #aaaaaa;
+                --app-header-background-front-layer: {
+                    background-image: url(../../img/banner.jpg);
+                    background-position: 50% 10%;
+                };
+            }
+
+            .avatar-container {
+                position: relative;
+                border: 2px solid #00AA8D;
+                border-radius: 50%;
+                height: 90px;
+                padding: 2px;
+                width: 90px;
+                margin: 20px auto;
+            }
+
+            .avatar-container .image {
+                background-image: url('../../img/profile.jpg');
+                background-repeat: no-repeat;
+                background-size: contain;
+                border-radius: 50%;
+                height: 100%;
+                width: 100%;
+            }
+
+            .contact-info {
+                margin: 0 20px;
+                padding-bottom: 20px;
+                border-bottom: 1px solid #CCC;
+                text-align: center;
+            }
+
+            .contact-info .name {
+                font-weight: bold;
+            }
+
+            .contact-info .email {
+                color: #999;
+            }
+
+            [main-title] {
+                font-size: 2em;
+            }
+
+            p {
+                font-size: 1.4rem;
+            }
+        </style>
+        <app-drawer-layout responsive-width="1280px">
+            <app-drawer swipe-open slot="drawer">
+                <div class="avatar-container">
+                    <div class="image"></div>
+                </div>
+                <div class="contact-info">
+                    <div class="name">Jonathan</div>
+                    <div class="email">heyfromjonathan@gmail.com</div>
+                </div>
+                <app-toolbar>
+                    <a href="#">Mis contactos</a>
+                </app-toolbar>
+            </app-drawer>
+            <app-header-layout>
+                <app-header
+                        condenses
+                        fixed
+                        shadow
+                        effects="resize-title parallax-background blend-background waterfall"
+                        slot="header">
+                    <app-toolbar>
+                        <div condensed-title>Mis contactos</div>
+                    </app-toolbar>
+
+                    <app-toolbar></app-toolbar>
+
+                    <app-toolbar>
+                        <div main-title spacer>Mis contactos</div>
+                    </app-toolbar>
+                </app-header>
+                <my-list on-view-contact="handleViewContact" on-edit-contact="handleEditContact" class="list"></my-list>
+                <my-profile contact="[[contact]]" class="profile"></my-profile>
+                <my-form contact-edit="[[contact]]" action="[[action]]" class="form"></my-form>
+            </app-header-layout>
+        </app-drawer-layout>
+    </template>
+    <script>
+        Polymer({
+            is: 'my-app',
+            properties: {
+                title: {
+                    type: String,
+                    value: 'CONTACTS'
+                },
+                contact: {
+                    type: Object,
+                    notify: true,
+                    reflectToAttribute: true
+                },
+            },
+            handleViewContact: function (event) {
+                this.contact = event.detail;
+                console.log(this.contact);
+            },
+            handleEditContact: function (event) {
+                this.contact = event.detail;
+                console.log(this.contact);
+            },
+            handleDeleteContact: function (event) {
+                this.contact = event.detail;
+                console.log(this.contact);
+            }
+        });
+    </script>
 </dom-module>

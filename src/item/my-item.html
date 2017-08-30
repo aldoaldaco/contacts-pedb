@@ -1,155 +1,133 @@
-<link rel="import" href="../../bower_components/polymer/polymer.html" />
-<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html" />
-<link rel="import" href="../../bower_components/iron-icons/editor-icons.html" />
-<link rel="import" href="../../bower_components/iron-icons/image-icons.html" />
-<link rel="import" href="../../bower_components/iron-icons/communication-icons.html" />
+<link rel="import" href="../../bower_components/polymer/polymer.html"/>
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html"/>
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/iron-icons/editor-icons.html"/>
+<link rel="import" href="../../bower_components/iron-icons/image-icons.html"/>
+<link rel="import" href="../../bower_components/iron-icons/communication-icons.html"/>
 <dom-module id="my-item">
-  <template>
-    <style>
-      :host{
-        width: 100%;
-        height: 100%;
-      }
-      .container{
-        width: 100%;
-        margin-bottom: 1px;
-        background-color: #000000;
-        border-bottom: 1px solid #CCCCCC;
-        color: #FFFFFF;
-      }
-      .picture{
-        border-radius: 50%;
-      }
-      .name{
-        text-transform: uppercase;
-        margin: 0px;
-        padding: 0px;
-        color: #FFFFFF;
-        font-weight: bold;
-      }
-      .settings{
-        width: 100%;
-        position: relative;
-        background-color: #F4F4F4;
-      }
-      .info{
-        position: relative;
-        color: #1C3A94;
-      }
-      .edit{
-        position: relative;
-        color: #77d800;
-      }
-      .delete{
-        position: relative;
-        color: #ff0000;
-      }
-      .more{
-        position: relative;
-        color: #000000;
-      }
-      .popup{
-        margin: 0px;
-        background-color: #CCCCCC;
-        position: absolute;
-        left: 73%;
-        display: inline-flex;
-      }
-      .popup::after {
-        content: "";
-        position: absolute;
-        top: calc(50% - 5px);
-        left: -10px;
-        margin-left: 0px;
-        margin-right: 0px;
-        border-width: 5px;
-        border-style: solid;
-        border-color: transparent #CCCCCC transparent transparent;
-      }
-    </style>
-    <div class="container">
-      <div class="information">
-        <img src="[[contact.picture.large]]" alt="[[contact.login.username]]" class="picture">
-        <p class="name">[[contact.name.first]]</p>
-        <p class="name">[[contact.name.last]]</p>
-      </div>
-      <div class="settings">
-        <paper-icon-button icon="info" id="info" class="info"></paper-icon-button>
-        <paper-icon-button icon="editor:mode-edit" id="edit" class="edit"></paper-icon-button>
-        <paper-icon-button icon="delete" id="delete" class="delete"></paper-icon-button>
-        <paper-icon-button icon="more-vert" id="more" class="more"></paper-icon-button>
-        <template is="dom-if" if="[[flag]]">
-          <div class="popup">
-            <paper-icon-button icon="image:crop-original" id="iconPicture"></paper-icon-button>
-            <paper-icon-button icon="communication:call" id="iconCall"></paper-icon-button>
-          </div>
-        </template>
-      </div>
+    <template>
+        <style>
+            paper-card {
+                --paper-card-header-image: {
+                    border-radius: 20%;
+                };
+                --paper-card-header-color: white;
+            }
 
-    </div>
-  </template>
-  <script>
-    Polymer({
-      is: 'my-item',
-      properties: {
-        contact: {
-          type: Object,
-          notify: true
-        },
-        contactSelected: {
-          type: Object,
-          notify: true
-        },
-      },
-      /*
-        Add listener to hear click on submit button
-      */
-      attached: function(){
-          this.listen(this.$.info, 'tap', 'viewContact');
-          this.listen(this.$.edit, 'tap', 'editContact');
-          this.listen(this.$.delete, 'tap', 'deleteContact');
-          this.listen(this.$.more, 'tap', 'moreActions');
-      },
-      /*
-        Dispatch event to say about the view contact
-      */
-      viewContact: function(event){
-        this.fire('view-contact',this.contact);
-      },
-      /*
-        Dispatch event to say about the edit contact
-      */
-      editContact: function(){
-        this.fire('edit-contact',this.contact);
-      },
-      /*
-        Dispatch event to say about the delete contact
-      */
-      deleteContact: function(){
-        //console.log(this.contact);
-        if(confirm("You want delete the contact")){
-          //console.log("Contact was deleted");
-          this.fire('delete-contact',this.contact);
-        } else {
-          console.log("Contact still alive");
-        }
+            .container {
+                padding: 5px;
+                background: #FFF;
+                margin: 20px;
+                float: left;
+                box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.4);
+                -webkit-transition: box-shadow 2s, -webkit-transform 500ms, -webkit-filter 500ms ease-in-out;
+                transition: box-shadow 2s, transform 500ms, filter 500ms ease-in-out;
+            }
 
-      },
-      /*
-        Dispatch event to say about the more actions
-      */
-      moreActions: function(){
-        this.flag = !this.flag;
-      },
-      /*
-        Turn off the listener of click event
-      */
-      detached: function(){
-        this.unlisten(this.$.info, 'tap', 'viewContact');
-        this.unlisten(this.$.edit, 'tap', 'editContact');
-        this.unlisten(this.$.delete, 'tap', 'deleteContact');
-        this.unlisten(this.$.more, 'tap', 'moreActions');
-      },
-    });
-  </script>
+            .card-actions {
+                display: flex;
+                flex-direction: row;
+            }
+
+            .container:hover {
+                -webkit-transform: scale(1.05);
+                transform: scale(1.05);
+                box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.6);
+            }
+
+            .blur {
+                -webkit-filter: blur(3px);
+                filter: blur(3px);
+                filter: url(blur.svg#blur);
+                -webkit-transform: scale(0.95);
+                transform: scale(0.95);
+            }
+        </style>
+        <div class="container">
+            <paper-card heading="[[contact.login.username]]" image="[[contact.picture.large]]"
+                        alt="[[contact.login.username]]" animatedShadow>
+                <div class="card-content">
+                    <p class="name">[[contact.name.first]]</p>
+                    <p class="name">[[contact.name.last]]</p>
+                </div>
+                <div class="card-actions">
+                    <paper-icon-button icon="info" id="info" class="info"></paper-icon-button>
+                    <paper-icon-button icon="editor:mode-edit" id="edit" class="edit"></paper-icon-button>
+                    <paper-icon-button icon="delete" id="delete" class="delete"></paper-icon-button>
+                    <paper-icon-button icon="more-vert" id="more" class="more"></paper-icon-button>
+                    <template is="dom-if" if="[[flag]]">
+                        <div class="popup">
+                            <paper-icon-button icon="image:crop-original" id="iconPicture"></paper-icon-button>
+                            <paper-icon-button icon="communication:call" id="iconCall"></paper-icon-button>
+                        </div>
+                    </template>
+                </div>
+            </paper-card>
+        </div>
+    </template>
+    <script>
+        Polymer({
+            is: 'my-item',
+            properties: {
+                contact: {
+                    type: Object,
+                    notify: true
+                },
+                contactSelected: {
+                    type: Object,
+                    notify: true
+                },
+            },
+            /*
+              Add listener to hear click on submit button
+            */
+            attached: function () {
+                this.listen(this.$.info, 'tap', 'viewContact');
+                this.listen(this.$.edit, 'tap', 'editContact');
+                this.listen(this.$.delete, 'tap', 'deleteContact');
+                this.listen(this.$.more, 'tap', 'moreActions');
+            },
+            /*
+              Dispatch event to say about the view contact
+            */
+            viewContact: function (event) {
+                this.fire('view-contact', this.contact);
+            },
+            /*
+              Dispatch event to say about the edit contact
+            */
+            editContact: function () {
+                this.fire('edit-contact', this.contact);
+            },
+            /*
+              Dispatch event to say about the delete contact
+            */
+            deleteContact: function () {
+                //console.log(this.contact);
+                if (confirm("You want delete the contact")) {
+                    //console.log("Contact was deleted");
+                    this.fire('delete-contact', this.contact);
+                } else {
+                    console.log("Contact still alive");
+                }
+
+            },
+            /*
+              Dispatch event to say about the more actions
+            */
+            moreActions: function () {
+                this.flag = !this.flag;
+            },
+            /*
+              Turn off the listener of click event
+            */
+            detached: function () {
+                this.unlisten(this.$.info, 'tap', 'viewContact');
+                this.unlisten(this.$.edit, 'tap', 'editContact');
+                this.unlisten(this.$.delete, 'tap', 'deleteContact');
+                this.unlisten(this.$.more, 'tap', 'moreActions');
+            },
+        });
+    </script>
+    </template>
 </dom-module>

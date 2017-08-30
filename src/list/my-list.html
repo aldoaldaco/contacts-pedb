@@ -1,72 +1,61 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html"/>
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../item/my-item.html">
 <dom-module id="my-list">
-  <template>
-    <style>
-      .title{
-        width: 100%;
-        height: 6%;
-        margin: 0px;
-      }
-      .container{
-        width: 100%;
-        height: 94%;
-        overflow-y: scroll;
-        overflow-x: hidden;
-      }
-      .container::-webkit-scrollbar-track{
-        background-color: #F4F4F4;
-        border-radius: 2px;
-      }
-      .container::-webkit-scrollbar{
-        width: 2px;
-        background-color: #F4F4F4;
-      }
-      .container::-webkit-scrollbar-thumb{
-        border-radius: 2px;
-        background-color: #000000;
-      }
-    </style>
-    <h2 class="title">[[title]]</h2>
-    <div class="container">
-      <template is="dom-repeat" items="{{contacts}}">
-        <my-item contact="[[item]]"></my-item>
-      </template>
-    </div>
-  </template>
-  <script>
-  Polymer({
-    is: 'my-list',
-    properties: {
-      title: {
-        type: String,
-        value: 'CONTACTS'
-      },
-      contacts: {
-        type: Array,
-        value: []
-      },
-      contactSelected: {
-        type: Object,
-        notify: true
-      }
-    },
-    attached: function() {
-      const url = 'https://randomuser.me/api/?results=10';
-      fetch(url)
-      .then(request => {
-          return request.json();
-      })
-      .then(data => {
-          data.results.forEach(result => {
-              this.push('contacts', result);
-          });
-      })
-      .catch(error => {
-          console.log('Bad request loaded.');
-      });
-    }
-  });
+    <template>
+        <style>
+            .container {
+                padding: 20px;
+                margin: 15px;
+            }
 
-  </script>
+            /*obliga a contenedor al tomar la altura de su contenido*/
+            .container:before,
+            .container:after {
+                content: "";
+                display: block;
+                clear: both;
+            }
+        </style>
+        <div class="container">
+            <template is="dom-repeat" items="{{contacts}}">
+                <my-item contact="[[item]]"></my-item>
+            </template>
+        </div>
+    </template>
+    <script>
+        Polymer({
+            is: 'my-list',
+            properties: {
+                title: {
+                    type: String,
+                    value: 'CONTACTS'
+                },
+                contacts: {
+                    type: Array,
+                    value: []
+                },
+                contactSelected: {
+                    type: Object,
+                    notify: true
+                }
+            },
+            attached: function () {
+                const url = 'https://randomuser.me/api/?results=10';
+                fetch(url)
+                    .then(request => {
+                        return request.json();
+                    })
+                    .then(data => {
+                        data.results.forEach(result => {
+                            this.push('contacts', result);
+                        });
+                    })
+                    .catch(error => {
+                        console.log('Bad request loaded.');
+                    });
+            }
+        });
+
+    </script>
 </dom-module>

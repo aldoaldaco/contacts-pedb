@@ -28,35 +28,39 @@
         width: 80%;
       }
       </style>
-      <!--<template is="dom-if" if="[[flag]]">-->
+
         <h2 class="title">[[title]]</h2>
         <div class="container">
           <form class="form">
-            <paper-input label-always-float label="first" id="first" value="{{contact.name.first}}">
+            <paper-input label-always-float label="first" id="first" value="{{contactEdit.name.first}}">
               <iron-icon icon="social:person" slot="prefix"></iron-icon>
               <paper-icon-button slot="suffix" on-tap="clearInput" icon="clear" alt="clear" title="clear"></paper-icon-button>
             </paper-input>
-            <paper-input label-always-float label="last" id="last" value="{{contact.name.last}}">
+            <paper-input label-always-float label="last" id="last" value="{{contactEdit.name.last}}">
               <iron-icon icon="social:person" slot="prefix"></iron-icon>
               <paper-icon-button slot="suffix" on-tap="clearInput" icon="clear" alt="clear" title="clear"></paper-icon-button>
             </paper-input>
-            <paper-input label-always-float label="email" id="email" value="{{contact.email}}">
+            <paper-input label-always-float label="email" id="email" value="{{contactEdit.email}}">
               <iron-icon icon="mail" slot="prefix"></iron-icon>
               <paper-icon-button slot="suffix" on-tap="clearInput" icon="clear" alt="clear" title="clear"></paper-icon-button>
             </paper-input>
-            <paper-input label-always-float label="cell" id="cell" value="{{contact.cell}}">
+            <paper-input label-always-float label="cell" id="cell" value="{{contactEdit.cell}}">
               <iron-icon icon="communication:phone" slot="prefix"></iron-icon>
               <paper-icon-button slot="suffix" on-tap="clearInput" icon="clear" alt="clear" title="clear"></paper-icon-button>
             </paper-input>
-            <paper-input label-always-float label="username" id="username" value="{{contact.login.username}}">
+            <paper-input label-always-float label="username" id="username" value="{{contactEdit.login.username}}">
               <iron-icon icon="social:person" slot="prefix"></iron-icon>
               <paper-icon-button slot="suffix" on-tap="clearInput" icon="clear" alt="clear" title="clear"></paper-icon-button>
             </paper-input>
-            <paper-button id="save">Save</paper-button>
-            <paper-button id="update">Update</paper-button>
+            <!--<template is="dom-if" if="{{flag}}">-->
+              <paper-button id="update">Update</paper-button>
+            <!--</template>-->
+            <!--<template is="dom-if" if="{{!flag}}">-->
+              <paper-button id="save">Save</paper-button>
+            <!--</template>-->
           </form>
         </div>
-      <!--</template>-->
+
   </template>
   <script>
     Polymer({
@@ -74,8 +78,7 @@
         action: {
           type: String,
           value: '',
-          notify: true,
-          oberver: 'onAction()'
+          notify: true
         },
         first: {
           type: String,
@@ -99,7 +102,7 @@
           },
           notify: true
         },
-        contact: {
+        contactEdit: {
           type: Object,
           notify: true,
           reflectToAttribute: true

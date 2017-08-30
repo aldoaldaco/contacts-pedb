@@ -122,12 +122,18 @@
                     notify: true,
                     reflectToAttribute: true
                 },
+                action: {
+                    type: String,
+                    notify: true,
+                    reflectToAttribute: true
+                }
             },
             handleViewContact: function (event) {
                 this.contact = event.detail;
                 console.log(this.contact);
             },
             handleEditContact: function (event) {
+                this.action = 'edit';
                 this.contact = event.detail;
                 console.log(this.contact);
             },

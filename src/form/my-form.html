@@ -82,7 +82,8 @@
                 flag: {
                     type: Boolean,
                     value: false,
-                    notify: true
+                    notify: true,
+                    computed: 'getAction(this.action)'
                 },
                 action: {
                     type: String,
@@ -138,8 +139,12 @@
             /*
               Dispatch event depend of the action type
             */
-            onAction: function () {
-                console.log(this.action);
+            getAction: function (action) {
+              if(action == 'edit') {
+
+              } else {
+
+              }
             },
         });
     </script>

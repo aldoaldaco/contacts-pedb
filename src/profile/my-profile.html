@@ -1,102 +1,79 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <dom-module id="my-profile">
-  <template>
-    <style>
-      .title{
-        width: 100%;
-        height: 6%;
-        margin: 0px;
-      }
-      .container{
-        width: 100%;
-        height: 94%;
-        padding-top: 10px;
-        background-color: #CCCCCC;
-        margin: 0px;
-        padding: 0px;
-        display: flex;
-        align-items: center;
-      }
-      .card{
-        width: 90%;
-        margin: 0 auto;
-        border-radius: 5px;
-        background-color: #000000;
-        color: #FFFFFF;
-        border: 1px solid #FFFFFF;
-        display: flex;
-        flex-direction: row;
-      }
-      .picture{
-        width: calc(30% - 10%);
-        height: calc(100% - 10%);
-        margin: 5%;
-        border-radius: 50%;
-      }
-      .data{
-        width: 70%;
-        text-align: center;
-      }
-    </style>
-    <h2 class="title">[[title]]</h2>
-    <div class="container">
-      <div class="card">
-        <img src="[[contact.picture.large]]" alt="[[contact.login.username]]" class="picture">
-        <div class="data">
-          <template is="dom-if" if="[[sex]]">
-            <iron-icon icon="female"></iron-icon>
-          </template>
-          <template is="dom-if" if="[[!sex]]">
-            <iron-icon icon="male"></iron-icon>
-          </template>
-          <p>[[fullName]]</p>
-          <p>[[contact.email]]</p>
-          <p>[[contact.cell]]</p>
+    <template>
+        <style>
+            paper-card {
+                margin: 20px;
+                display: flex;
+            }
+
+            .image {
+                border-radius: 20%;
+                width: 300px;
+                height: 280px;
+                padding: 20px;
+            }
+
+            .name {
+                text-transform: capitalize;
+            }
+        </style>
+        <div class="container">
+            <paper-card alt="[[contact.login.username]]" animatedShadow>
+                <div>
+                    <img class="image" src="[[contact.picture.large]]" alt="[[fullName]]">
+                </div>
+                <div class="body">
+                    <div class="card-content">
+                        <p class="name"><strong>Nombre: </strong>[[fullName]]</p>
+                        <p><strong>Usuario: </strong> [[contact.login.username]]</p>
+                        <p><strong>Sexo: </strong> [[contact.gender]]</p>
+                        <p><strong>Dirección: </strong>[[fullAddress]]</p>
+                        <p><strong>Correo electrónico: </strong>[[contact.email]]</p>
+                        <p><strong>Fecha de nacimiento: </strong>[[contact.dob]]</p>
+                        <p><strong>Teléfono: </strong>[[contact.phone]]</p>
+                        <p><strong>Celular: </strong>[[contact.cell]]</p>
+                        <p><strong>Nacionalidad: </strong>[[contact.nat]]</p>
+                    </div>
+                    <div class="card-actions">
+                        <paper-icon-button icon="editor:mode-edit" id="edit" class="edit">Editar</paper-icon-button>
+                        <paper-icon-button icon="delete" id="delete" class="delete">Eliminar</paper-icon-button>
+                        <paper-icon-button icon="communication:call" id="iconCall">Llamar</paper-icon-button>
+                    </div>
+                </div>
+
+            </paper-card>
         </div>
-      </div>
-    </div>
-  </template>
-  <script>
-    Polymer({
-      is: 'my-profile',
-      properties: {
-        title: {
-          type: String,
-          value: 'PROFILE'
-        },
-        mail: {
-          type: Object,
-          value: {
-            name: '',
-            email: '',
-            info: ''
-          },
-          notify: true
-        },
-        info: {
-          type: String,
-            value: '',
-          notify: true
-        },
-        fullName: {
-          type: String,
-          computed: 'getFullName(contact.name.first, contact.name.last)'
-        },
-        sex: {
-          type: Boolean,
-          computed: 'getSex(contact.gender)'
-        }
-      },
-      getFullName: function(firstName,lastName){
-        return firstName+' '+lastName;
-      },
-      getSex: function(gender){
-        if(gender=='female'){
-          return true;
-        } else {
-          return false;
-        }
-      }
-    });
-  </script>
+    </template>
+    <script>
+        Polymer({
+            is: 'my-profile',
+            properties: {
+                fullName: {
+                    type: String,
+                    computed: 'getFullName(contact.name.first, contact.name.last, contact.name.title)'
+                },
+                fullAddress: {
+                    type: String,
+                    computed: 'getFullAddress(contact.location.street, contact.location.postcode, contact.location.city, contact.location.state)'
+                }
+            },
+            attached: function () {
+                this.listen(this.$.edit, 'tap', 'editContact');
+                this.listen(this.$.delete, 'tap', 'deleteContact');
+            },
+            detached: function () {
+                this.unlisten(this.$.edit, 'tap', 'editContact');
+                this.unlisten(this.$.delete, 'tap', 'deleteContact');
+            },
+            getFullName: function (firstName, lastName, title) {
+                var computedName = title + '. ' + firstName + ' ' + lastName;
+                return computedName;
+            },
+            getFullAddress: function (street, postcode, city, state) {
+                var computedAddress = street + ', ' + postcode + ', ' + city + ', ' + state;
+                return computedAddress;
+            }
+        });
+    </script>
 </dom-module>

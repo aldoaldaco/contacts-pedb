@@ -112,13 +112,13 @@
                         effects="resize-title parallax-background blend-background waterfall"
                         slot="header">
                     <app-toolbar>
-                        <div condensed-title>Mis contactos</div>
+                        <div condensed-title>[[title]]</div>
                     </app-toolbar>
 
                     <app-toolbar></app-toolbar>
 
                     <app-toolbar>
-                        <div main-title spacer>Mis contactos</div>
+                        <div main-title spacer>[[title]]</div>
                     </app-toolbar>
                 </app-header>
                 <iron-pages selected="{{data.page}}" attr-for-selected="page-name" fallback-selection="contacts-list">
@@ -150,6 +150,10 @@
                     type: String,
                     notify: true,
                     reflectToAttribute: true
+                },
+                title: {
+                    type: String,
+                    computed: 'getTitle(data.page)'
                 }
             },
             handleViewContact: function (event) {
@@ -163,6 +167,22 @@
             },
             handleDeleteContact: function (event) {
                 this.contact = event.detail;
+            },
+            getTitle: function (page) {
+                switch (page) {
+                    case 'contacts-list': {
+                        return 'Mis contactos';
+                    }
+                    case 'profile': {
+                        return 'Perfil';
+                    }
+                    case 'add-contact': {
+                        return 'Nuevo contacto';
+                    }
+                    default: {
+                        return 'My App';
+                    }
+                }
             }
         });
     </script>

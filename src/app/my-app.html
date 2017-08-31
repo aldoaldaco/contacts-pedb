@@ -5,6 +5,7 @@
 <link rel="import" href="../../bower_components/app-route/app-location.html">
 <link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
 
 <link rel="import" href="../list/my-list.html">
 <link rel="import" href="../form/my-form.html">
@@ -17,8 +18,20 @@
                 height: 100%;
             }
 
-            a {
+            paper-button {
+                --paper-button: {
+                    font-size: 1.2rem;
+                }
+            }
+
+            a:link {
                 text-decoration: none;
+                color: black;
+            }
+
+            a:visited {
+                text-decoration: none;
+                color: black;
             }
 
             .list {
@@ -97,12 +110,8 @@
                     <div class="name">Jonathan</div>
                     <div class="email">heyfromjonathan@gmail.com</div>
                 </div>
-                <app-toolbar>
-                    <paper-listbox>
-                        <paper-item><a href="/contacts-list">Mis contactos</a></paper-item>
-                        <paper-item><a href="/add-contact">Crear contacto</a></paper-item>
-                    </paper-listbox>
-                </app-toolbar>
+                <paper-button><a href="/contacts-list">Mis contactos</a></paper-button>
+                <paper-button><a href="/add-contact">Nuevo contacto</a></paper-button>
             </app-drawer>
             <app-header-layout>
                 <app-header

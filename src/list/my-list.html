@@ -18,8 +18,13 @@
             }
         </style>
         <div class="container">
-            <template is="dom-repeat" items="{{contacts}}">
-                <my-item contact="[[item]]"></my-item>
+            <template is="dom-if" if="[[!long]]">
+                <template is="dom-repeat" items="{{contacts}}">
+                    <my-item contact="[[item]]"></my-item>
+                </template>
+            </template>
+            <template is="dom-if" if="[[long]]">
+                <h2>No hay contactos registrados</h2>
             </template>
         </div>
     </template>
@@ -35,11 +40,31 @@
                     type: Array,
                     value: []
                 },
-                contactSelected: {
+                contactSaved: {
                     type: Object,
+                    notify: true,
+                    reflectToAttribute: true,
+                    observer: '_saveContact'
+                },
+                contactEdit: {
+                    type: Object,
+                    notify: true,
+                    reflectToAttribute: true,
+                    observer: '_updateContact'
+                },
+                contactDelete: {
+                    type: Object,
+                    notify: true,
+                    reflectToAttribute: true,
+                    observer: '_deleteContact'
+                },
+                long: {
+                    type: Boolean,
+                    value: false,
                     notify: true
                 }
             },
+
             attached: function () {
                 const url = 'https://randomuser.me/api/?results=10';
                 fetch(url)
@@ -54,7 +79,29 @@
                     .catch(error => {
                         console.log('Bad request loaded.');
                     });
-            }
+            },
+            _saveContact: function(){
+                let contactsClone = this.contacts.slice(0);
+                contactsClone.push(this.contactSaved);
+                this.contacts = contactsClone;
+                this.notifyPath('contacts.*');
+                if(this.contacts.length <= 0){
+                    this.long = true;
+                }
+            },
+            _updateContact: function(){
+                console.log("Contact update");
+            },
+            _deleteContact: function(){
+                let contactsClone = this.contacts.slice(0);
+                let position = this.contacts.indexOf(this.contactDelete);
+                contactsClone.splice(position,1);
+                this.contacts = contactsClone;
+                this.notifyPath('contacts.*');
+                if(this.contacts.length <= 0){
+                    this.long = true;
+                }
+            },
         });
 
     </script>

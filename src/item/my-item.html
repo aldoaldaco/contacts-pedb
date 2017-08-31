@@ -51,10 +51,10 @@
                     <p class="name">[[contact.name.last]]</p>
                 </div>
                 <div class="card-actions">
-                    <paper-icon-button icon="info" id="info" class="info"></paper-icon-button>
-                    <paper-icon-button icon="editor:mode-edit" id="edit" class="edit"></paper-icon-button>
-                    <paper-icon-button icon="delete" id="delete" class="delete"></paper-icon-button>
-                    <paper-icon-button icon="communication:call" id="iconCall"></paper-icon-button>
+                    <paper-icon-button icon="info" id="info"></paper-icon-button>
+                    <paper-icon-button icon="editor:mode-edit" id="edit"></paper-icon-button>
+                    <paper-icon-button icon="delete" id="delete"></paper-icon-button>
+                    <paper-icon-button icon="communication:call" id="call"></paper-icon-button>
                 </div>
             </paper-card>
         </div>
@@ -73,51 +73,59 @@
                 },
             },
             /*
-              Add listener to hear click on submit button
-            */
+            * Add listener to hear click on submit button
+            * */
             attached: function () {
                 this.listen(this.$.info, 'tap', 'viewContact');
                 this.listen(this.$.edit, 'tap', 'editContact');
                 this.listen(this.$.delete, 'tap', 'deleteContact');
+                this.listen(this.$.call, 'tap', 'callContact');
             },
             /*
-              Dispatch event to say about the view contact
-            */
+            * Dispatch event to say about the view contact
+            * */
             viewContact: function (event) {
                 this.fire('view-contact', this.contact);
             },
             /*
-              Dispatch event to say about the edit contact
-            */
+            * Dispatch event to say about the edit contact
+            * */
             editContact: function () {
                 this.fire('edit-contact', this.contact);
             },
             /*
-              Dispatch event to say about the delete contact
-            */
+            * Dispatch event to say about the delete contact
+            * */
             deleteContact: function () {
-                //console.log(this.contact);
-                if (confirm("You want delete the contact")) {
-                    //console.log("Contact was deleted");
+                if (confirm("Seguro que deseas eliminar al usuario: "+ this.contact.login.username)) {
                     this.fire('delete-contact', this.contact);
                 } else {
-                    console.log("Contact still alive");
+                    console.log("Operacion cancelada");
                 }
-
             },
             /*
-              Dispatch event to say about the more actions
-            */
+            * Function to call a contact
+            * */
+            callContact: function(){
+                window.open(
+                    'https://appear.in/'+this.contact.login.username,
+                    '_blank' // <- This is what makes it open in a new window.
+                );
+            },
+            /*
+            * Dispatch event to say about the more actions
+            * */
             moreActions: function () {
                 this.flag = !this.flag;
             },
             /*
-              Turn off the listener of click event
-            */
+            * Turn off the listener of click event
+            * */
             detached: function () {
                 this.unlisten(this.$.info, 'tap', 'viewContact');
                 this.unlisten(this.$.edit, 'tap', 'editContact');
                 this.unlisten(this.$.delete, 'tap', 'deleteContact');
+                this.unlisten(this.$.call, 'tap', 'callContact');
             },
         });
     </script>

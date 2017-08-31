@@ -12,11 +12,6 @@
                 width: 100%;
             }
 
-            .title {
-                margin: 0px;
-                position: fixed;
-            }
-
             .container {
                 width: 100%;
                 height: 100%;
@@ -32,32 +27,35 @@
                 width: 80%;
             }
         </style>
-
-        <h2 class="title">[[title]]</h2>
         <div class="container">
             <form class="form">
-                <paper-input label-always-float label="first" id="first" value="{{contactEdit.name.first}}">
+                <paper-input label="first" id="first" value="{{contactEdit.name.first}}">
                     <iron-icon icon="social:person" slot="prefix"></iron-icon>
                     <paper-icon-button slot="suffix" on-tap="clearInput" icon="clear" alt="clear"
                                        title="clear"></paper-icon-button>
                 </paper-input>
-                <paper-input label-always-float label="last" id="last" value="{{contactEdit.name.last}}">
+                <paper-input label="last" id="last" value="{{contactEdit.name.last}}">
                     <iron-icon icon="social:person" slot="prefix"></iron-icon>
                     <paper-icon-button slot="suffix" on-tap="clearInput" icon="clear" alt="clear"
                                        title="clear"></paper-icon-button>
                 </paper-input>
-                <paper-input label-always-float label="email" id="email" value="{{contactEdit.email}}">
+                <paper-input label="username" id="username" value="{{contactEdit.login.username}}">
+                    <iron-icon icon="social:person" slot="prefix"></iron-icon>
+                    <paper-icon-button slot="suffix" on-tap="clearInput" icon="clear" alt="clear"
+                                       title="clear"></paper-icon-button>
+                </paper-input>
+                <paper-input label="email" id="email" value="{{contactEdit.email}}">
                     <iron-icon icon="mail" slot="prefix"></iron-icon>
                     <paper-icon-button slot="suffix" on-tap="clearInput" icon="clear" alt="clear"
                                        title="clear"></paper-icon-button>
                 </paper-input>
-                <paper-input label-always-float label="cell" id="cell" value="{{contactEdit.cell}}">
+                <paper-input label="phone" id="phone" value="{{contactEdit.phone}}">
                     <iron-icon icon="communication:phone" slot="prefix"></iron-icon>
                     <paper-icon-button slot="suffix" on-tap="clearInput" icon="clear" alt="clear"
                                        title="clear"></paper-icon-button>
                 </paper-input>
-                <paper-input label-always-float label="username" id="username" value="{{contactEdit.login.username}}">
-                    <iron-icon icon="social:person" slot="prefix"></iron-icon>
+                <paper-input label="cell" id="cell" value="{{contactEdit.cell}}">
+                    <iron-icon icon="communication:cell" slot="prefix"></iron-icon>
                     <paper-icon-button slot="suffix" on-tap="clearInput" icon="clear" alt="clear"
                                        title="clear"></paper-icon-button>
                 </paper-input>
@@ -82,13 +80,13 @@
                 flag: {
                     type: Boolean,
                     value: false,
-                    notify: true,
-                    computed: 'getAction(this.action)'
+                    notify: true
                 },
                 action: {
                     type: String,
                     value: '',
-                    notify: true
+                    notify: true,
+                    observer: 'getAction'
                 },
                 first: {
                     type: String,
@@ -119,32 +117,71 @@
                 }
             },
             /*
-              Get the id of clicked element
-            */
-            clearInput: function (event) {
-                let id = event.target.parentElement.parentElement.parentElement.parentElement.parentElement.id;
-                for (let x in this.$) {
-                    if (id == x) {
-                        //console.log(this.$$(`#${x}`).value);
-                    }
-                }
-                //dont working
-            },
+            * Function to fire the event to save the contact
+            * */
             saveContact: function () {
-                console.log("on case to save");
-            },
-            updateContact: function () {
-                console.log("on case to update");
+                const newContact = {
+                    name: {
+                        first: this.$.first.value,
+                        last: this.$.first.value
+                    },
+                    login: {
+                        username: this.$.username.value
+                    },
+                    email: this.$.email.value,
+                    phone: this.$.phone.value,
+                    cell: this.$.cell.value,
+                    picture: {
+                        large: "../../img/user.png",
+                        medium: "../../img/user.png",
+                        thumb: "../../img/user.png"
+                    }
+                };
+                this.fire('saved-contact', newContact);
             },
             /*
-              Dispatch event depend of the action type
-            */
-            getAction: function (action) {
-              if(action == 'edit') {
-
-              } else {
-
-              }
+            * Function to fire the event to update the contact
+            * */
+            updateContact: function () {
+                const newContact = {
+                    name: {
+                        first: this.$.first.value,
+                        last: this.$.first.value
+                    },
+                    login: {
+                        username: this.$.username.value
+                    },
+                    email: this.$.email.value,
+                    phone: this.$.phone.value,
+                    cell: this.$.cell.value,
+                    picture: {
+                        large: this.contactEdit.picture.large,
+                        medium: this.contactEdit.picture.large,
+                        thumb: this.contactEdit.picture.large
+                    }
+                };
+                this.fire('updated-contact', newContact);
+            },
+            /*
+            * Function to set the computed propertie flag depend of action type
+            * */
+            getAction: function () {
+                if(this.action=='edit'){
+                    this.flag = true;
+                } else {
+                    this.flag = false;
+                }
+            },
+            /*
+           * Function to clean the input on tap of button X
+           * */
+            clearInput: function (event) {
+                let id = event.target.parentElement.parentElement.parentElement.parentElement.parentElement.id;
+                for (let x of this.$) {
+                    if (id == x) {
+                        console.log(x);
+                    }
+                }
             },
         });
     </script>

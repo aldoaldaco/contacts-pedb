@@ -111,7 +111,7 @@
                     <div class="email">heyfromjonathan@gmail.com</div>
                 </div>
                 <paper-button><a href="/contacts-list">Mis contactos</a></paper-button>
-                <paper-button><a href="/add-contact">Nuevo contacto</a></paper-button>
+                <paper-button><a href="/add-contact" on-tap="handleAddContact">Nuevo contacto</a></paper-button>
             </app-drawer>
             <app-header-layout>
                 <app-header
@@ -133,14 +133,17 @@
                 <iron-pages selected="{{data.page}}" attr-for-selected="page-name" fallback-selection="contacts-list">
                     <div page-name="contacts-list">
                         <my-list page-name="contacts-list" on-view-contact="handleViewContact"
-                                 on-edit-contact="handleEditContact"
+                                 on-edit-contact="handleEditContact" on-delete-contact="handleDeleteContact" contact-saved="[[contactSaved]]" contact-edited="[[contactEdited]]" contact-delete="[[contactDelete]]"
                                  class="list"></my-list>
                     </div>
                     <div page-name="profile">
-                        <my-profile contact="[[contact]]" class="profile"></my-profile>
+                        <my-profile on-edit-contact="handleEditContact" on-delete-contact="handleDeleteContact" contact="[[contact]]" class="profile"></my-profile>
                     </div>
                     <div page-name="add-contact">
-                        <my-form contact-edit="[[contact]]" action="[[action]]" class="form"></my-form>
+                        <my-form on-saved-contact="handleSaveContact" action="[[action]]" class="form"></my-form>
+                    </div>
+                    <div page-name="edit-contact">
+                        <my-form on-updated-contact="handleUpdatedContact" contact-edit="[[contactEdit]]" action="[[action]]" class="form"></my-form>
                     </div>
                 </iron-pages>
             </app-header-layout>
@@ -155,6 +158,26 @@
                     notify: true,
                     reflectToAttribute: true
                 },
+                contactSaved: {
+                    type: Object,
+                    notify: true,
+                    reflectToAttribute: true
+                },
+                contactEdit: {
+                    type: Object,
+                    notify: true,
+                    reflectToAttribute: true
+                },
+                contactEdited: {
+                    type: Object,
+                    notify: true,
+                    reflectToAttribute: true
+                },
+                contactDelete: {
+                    type: Object,
+                    notify: true,
+                    reflectToAttribute: true
+                },
                 action: {
                     type: String,
                     notify: true,
@@ -165,18 +188,53 @@
                     computed: 'getTitle(data.page)'
                 }
             },
+            /*
+            * Function to manage the view contact
+            * */
             handleViewContact: function (event) {
                 this.contact = event.detail;
                 this.set('data.page', 'profile');
             },
-            handleEditContact: function (event) {
-                this.action = 'edit';
-                this.contact = event.detail;
+            /*
+            * Function to manage the save contact object
+            * */
+            handleAddContact:  function(){
+                this.action = 'save';
                 this.set('data.page', 'add-contact');
             },
-            handleDeleteContact: function (event) {
-                this.contact = event.detail;
+            /*
+            * Function to save contact on the list
+            * */
+            handleSaveContact: function(event){
+                alert("save contact");
+                console.log(event.detail);
+                this.set('contactSaved',event.detail);
             },
+            /*
+            * Function to manage the edit contact
+            * */
+            handleEditContact: function (event) {
+                this.action = 'edit';
+                this.contactEdit = event.detail;
+                this.set('data.page', 'edit-contact');
+            },
+            /*
+            * Function to manage the edit contact
+            * */
+            handleUpdateContact: function (event) {
+                this.action = 'edit';
+                this.contactEdit = event.detail;
+                this.set('data.page', 'edit-contact');
+            },
+            /*
+            * Function to manage the delete contact
+            * */
+            handleDeleteContact: function (event) {
+                this.contactDelete = event.detail;
+            },
+            /*
+            * Fucntion to set the page title depends on te location
+            * */
             getTitle: function (page) {
                 switch (page) {
                     case 'contacts-list': {
@@ -187,6 +245,9 @@
                     }
                     case 'add-contact': {
                         return 'Nuevo contacto';
+                    }
+                    case 'edit-contact': {
+                        return 'Editar contacto';
                     }
                     default: {
                         return 'My App';

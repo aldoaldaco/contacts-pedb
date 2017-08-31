@@ -36,9 +36,9 @@
                         <p><strong>Nacionalidad: </strong>[[contact.nat]]</p>
                     </div>
                     <div class="card-actions">
-                        <paper-icon-button icon="editor:mode-edit" id="edit" class="edit">Editar</paper-icon-button>
-                        <paper-icon-button icon="delete" id="delete" class="delete">Eliminar</paper-icon-button>
-                        <paper-icon-button icon="communication:call" id="iconCall">Llamar</paper-icon-button>
+                        <paper-icon-button icon="editor:mode-edit" id="edit" class="edit" on-tap="editContact">Editar</paper-icon-button>
+                        <paper-icon-button icon="delete" id="delete" class="delete" on-tap="deleteContact">Eliminar</paper-icon-button>
+                        <paper-icon-button icon="communication:call" id="iconCall" on-tap="callContact">Llamar</paper-icon-button>
                     </div>
                 </div>
 
@@ -56,6 +56,9 @@
                 fullAddress: {
                     type: String,
                     computed: 'getFullAddress(contact.location.street, contact.location.postcode, contact.location.city, contact.location.state)'
+                },
+                contact: {
+                    type: Object,
                 }
             },
             attached: function () {
@@ -73,7 +76,32 @@
             getFullAddress: function (street, postcode, city, state) {
                 var computedAddress = street + ', ' + postcode + ', ' + city + ', ' + state;
                 return computedAddress;
-            }
+            },
+            /*
+            * Dispatch event to say about the delete contact
+            * */
+            deleteContact: function () {
+                if (confirm("Seguro que deseas eliminar al usuario: "+ this.contact.login.username)) {
+                    this.fire('delete-contact', this.contact);
+                } else {
+                    console.log("Operacion cancelada");
+                }
+            },
+            /*
+            * Dispatch event to say about the edit contact
+            * */
+            editContact: function () {
+                this.fire('edit-contact', this.contact);
+            },
+            /*
+            * Function to call a contact
+            * */
+            callContact: function(){
+                window.open(
+                    'https://appear.in/'+this.contact.login.username,
+                    '_blank' // <- This is what makes it open in a new window.
+                );
+            },
         });
     </script>
 </dom-module>

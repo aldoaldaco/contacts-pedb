@@ -54,13 +54,7 @@
                     <paper-icon-button icon="info" id="info" class="info"></paper-icon-button>
                     <paper-icon-button icon="editor:mode-edit" id="edit" class="edit"></paper-icon-button>
                     <paper-icon-button icon="delete" id="delete" class="delete"></paper-icon-button>
-                    <paper-icon-button icon="more-vert" id="more" class="more"></paper-icon-button>
-                    <template is="dom-if" if="[[flag]]">
-                        <div class="popup">
-                            <paper-icon-button icon="image:crop-original" id="iconPicture"></paper-icon-button>
-                            <paper-icon-button icon="communication:call" id="iconCall"></paper-icon-button>
-                        </div>
-                    </template>
+                    <paper-icon-button icon="communication:call" id="iconCall"></paper-icon-button>
                 </div>
             </paper-card>
         </div>
@@ -85,7 +79,6 @@
                 this.listen(this.$.info, 'tap', 'viewContact');
                 this.listen(this.$.edit, 'tap', 'editContact');
                 this.listen(this.$.delete, 'tap', 'deleteContact');
-                this.listen(this.$.more, 'tap', 'moreActions');
             },
             /*
               Dispatch event to say about the view contact
@@ -125,7 +118,6 @@
                 this.unlisten(this.$.info, 'tap', 'viewContact');
                 this.unlisten(this.$.edit, 'tap', 'editContact');
                 this.unlisten(this.$.delete, 'tap', 'deleteContact');
-                this.unlisten(this.$.more, 'tap', 'moreActions');
             },
         });
     </script>

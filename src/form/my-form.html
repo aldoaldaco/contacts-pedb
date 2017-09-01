@@ -126,7 +126,7 @@
                 const newContact = {
                     name: {
                         first: this.$.first.value,
-                        last: this.$.first.value
+                        last: this.$.last.value
                     },
                     login: {
                         username: this.$.username.value
@@ -141,6 +141,12 @@
                     }
                 };
                 this.fire('saved-contact', newContact);
+                this.$.first.value = null;
+                this.$.last.value = null;
+                this.$.username.value = null;
+                this.$.email.value = null;
+                this.$.phone.value = null;
+                this.$.cell.value = null;
             },
             /*
             * Function to fire the event to update the contact
@@ -149,7 +155,7 @@
                 const newContact = {
                     name: {
                         first: this.$.first.value,
-                        last: this.$.first.value
+                        last: this.$.last.value
                     },
                     login: {
                         username: this.$.username.value

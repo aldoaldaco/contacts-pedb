@@ -46,7 +46,7 @@
                     reflectToAttribute: true,
                     observer: '_saveContact'
                 },
-                contactEdit: {
+                contactEdited: {
                     type: Object,
                     notify: true,
                     reflectToAttribute: true,
@@ -81,20 +81,28 @@
                     });
             },
             _saveContact: function(){
-                let contactsClone = this.contacts.slice(0);
-                contactsClone.push(this.contactSaved);
+                const contactsClone = this.contacts.slice(0);
+                const long = contactsClone.length;
+                contactsClone.splice(long,0,this.contactSaved);
                 this.contacts = contactsClone;
                 this.notifyPath('contacts.*');
-                if(this.contacts.length <= 0){
-                    this.long = true;
-                }
             },
             _updateContact: function(){
-                console.log("Contact update");
+                const contactsClone = this.contacts.slice(0);
+                let a = 0;
+                for(let i of contactsClone){
+                    if(i.login.username === this.contactEdited.login.username){
+                        contactsClone.splice(a,1,this.contactEdited);
+                    }
+                    console.log('position: '+a+' object: '+i);
+                    a++;
+                }
+                this.contacts = contactsClone;
+                this.notifyPath('contacts.*');
             },
             _deleteContact: function(){
-                let contactsClone = this.contacts.slice(0);
-                let position = this.contacts.indexOf(this.contactDelete);
+                const contactsClone = this.contacts.slice(0);
+                const position = this.contacts.indexOf(this.contactDelete);
                 contactsClone.splice(position,1);
                 this.contacts = contactsClone;
                 this.notifyPath('contacts.*');
